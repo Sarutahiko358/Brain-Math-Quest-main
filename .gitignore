@@ -23,3 +23,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE settings
+.vscode/
+
+# audit reports
+audit-report.json
