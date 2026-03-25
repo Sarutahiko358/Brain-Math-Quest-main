@@ -6,9 +6,8 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { handleVibration } from '../handlers/handleVibration';
-import { handleConfirmDialog } from '../handlers/handleConfirmDialog';
-import { handleDeleteSlot } from '../handlers/handleDeleteSlot';
+import { handleVibration, handleConfirmDialog } from '../handlers/uiHandlers';
+import { handleDeleteSlot } from '../handlers/saveHandlers';
 
 describe('handleVibration', () => {
   beforeEach(() => {

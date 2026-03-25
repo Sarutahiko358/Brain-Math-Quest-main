@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { handleEnemyStrike, EnemyStrikeDeps } from '../handleEnemyStrike';
+import { handleEnemyStrike, EnemyStrikeDeps } from '../battleHandlers';
 import { Player, BattleState } from '../../../lib/gameTypes';
 import { TimerManager } from '../../../lib/timerManager';
 

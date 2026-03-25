@@ -1,13 +1,53 @@
-/**
- * Brain-Only Mode Result Handler
- * 
- * Mechanically extracted from DQBrain.tsx - handles brain-only quiz results.
- * Original location: DQBrain.tsx lines ~1127-1164
- */
+// ─── brainOnlyHandlers.ts ─────────────────────────────────
+// Consolidation of: handleBrainOnlyResult, handleStartBrainOnlyQuiz
+// Phase 1: file merge only – no logic changes
+// ──────────────────────────────────────────────────────────
 
 import { QuizBundle, QuizType } from '../../lib/quiz/types';
+import { Settings } from '../../lib/settings';
+import { makeQuizPack } from '../../lib/quiz/generators';
+import { Enemy, ENEMY_POOL } from '../../lib/enemies';
+import { pick } from '../../lib/rng';
 import { BrainOnlyMode, BrainEnemyAnim } from '../types';
 import { TimerManager } from '../../lib/timerManager';
+
+// ─── handleStartBrainOnlyQuiz ─────────────────────────────
+
+export interface StartBrainOnlyQuizDeps {
+  settings: Settings;
+  setBrainEnemy: (enemy: Enemy | null) => void;
+  setBrainOnlyQuiz: (quiz: QuizBundle | null) => void;
+}
+
+export function handleStartBrainOnlyQuiz(deps: StartBrainOnlyQuizDeps) {
+  const { settings, setBrainEnemy, setBrainOnlyQuiz } = deps;
+  
+  const difficulty = settings.difficulty;
+  const pack = 'attack';
+
+  const result = makeQuizPack(difficulty, pack, {
+    hardQuizRandom: settings.hardQuizRandom,
+    quizTypes: settings.quizTypes.length > 0 ? settings.quizTypes : undefined
+  });
+  
+  try {
+    const e = pick(ENEMY_POOL);
+    setBrainEnemy(e);
+  } catch (error) {
+    console.error('Failed to pick brain-only enemy:', error);
+  }
+
+  setBrainOnlyQuiz({
+    quiz: result.quiz,
+    timeMax: result.time,
+    timeLeft: result.time,
+    timeStart: Date.now(),
+    pack: 'attack',
+    power: 1
+  });
+}
+
+// ─── handleBrainOnlyResult ────────────────────────────────
 
 export interface BrainOnlyResultDeps {
   timerManager: TimerManager;
@@ -40,11 +80,9 @@ export function handleBrainOnlyResult(ok: boolean, quizBundle: QuizBundle, deps:
 
   const timeSpent = quizBundle.timeStart ? (Date.now() - quizBundle.timeStart) / 1000 : 0;
 
-  // Calculate next count BEFORE state updates to avoid timing issues
   const nextCount = brainOnlyStats.total + 1;
   const finishedFixed = (brainOnlyMode === 'fixed') && (nextCount >= brainOnlyTarget);
 
-  // record per-question result
   setBrainOnlyRecords(r => [...r, { ok, time: timeSpent, type: quizBundle.quiz.type }]);
 
   setBrainOnlyStats(stats => {
@@ -67,7 +105,6 @@ export function handleBrainOnlyResult(ok: boolean, quizBundle: QuizBundle, deps:
     addToast(`❌ 不正解`);
   }
 
-  // Wait a bit before proceeding
   timerManager.setTimeout(() => {
     setBrainEnemyAnim(null);
     if (finishedFixed) {

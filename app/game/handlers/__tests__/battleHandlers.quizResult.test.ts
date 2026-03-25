@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { handleQuizResult, QuizResultDeps } from '../handleQuizResult';
+import { handleQuizResult, QuizResultDeps } from '../battleHandlers';
 import { Player, BattleState, GameMode } from '../../../lib/gameTypes';
 import { Settings } from '../../../lib/settings';
 import { TimerManager } from '../../../lib/timerManager';
