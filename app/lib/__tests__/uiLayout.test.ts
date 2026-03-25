@@ -1,4 +1,4 @@
-import { computeFirstRunLayout, GRID_GAP_PX, GRID_PADDING_PX } from '../../lib/uiLayout';
+import { computeFirstRunLayout, GRID_GAP_PX, GRID_PADDING_PX } from '../uiLayout';
 
 describe('Grid constants', () => {
   it('GRID_GAP_PX is defined correctly', () => {
