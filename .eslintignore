@@ -1,6 +1,0 @@
-next-env.d.ts
-.next/
-coverage/
-dist/
-build/
-public/

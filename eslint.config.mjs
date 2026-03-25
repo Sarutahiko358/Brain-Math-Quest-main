@@ -25,7 +25,6 @@ export default [
             '.next/**',
             'coverage/**',
             'dist/**',
-            'docs/legacy/**',
             'next-env.d.ts',
         ],
     },
